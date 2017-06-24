@@ -23,7 +23,7 @@ $ tweety post "message"
 ### Sniff a word or words (separates by commas)
 
 ```sh
-$ tweety snif "#golang,#reactjs"
+$ tweety sniff "#golang,#reactjs"
 ```
 
 ### Retweet (in progress)
