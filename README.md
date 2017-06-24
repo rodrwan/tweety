@@ -17,13 +17,13 @@ To get those values you need to create a new app in [Twitter](https://apps.twitt
 ### Post a new Tweet
 
 ```sh
-$ tweety post "message"
+$ tweety post -message "some message"
 ```
 
 ### Sniff a word or words (separates by commas)
 
 ```sh
-$ tweety sniff "#golang,#reactjs"
+$ tweety sniff -word "#golang,#reactjs"
 ```
 
 ### Retweet (in progress)
