@@ -3,12 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
-	"net/url"
 	"os"
 
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/Sirupsen/logrus"
-	"github.com/yanzay/log"
 )
 
 var (
@@ -68,58 +66,6 @@ var subcmds = []subcmd{
 	{"sniff", "sniff a word in twitter stream.", tweetySniff},
 }
 
-// tweetyPost this method allow us to write a new post on a Twitter account.
-func tweetyPost(args []string, api *anaconda.TwitterApi) {
-	fs := flag.NewFlagSet("post", flag.ExitOnError)
-	message := fs.String("message", "", "message to post in twitter.")
-
-	fs.Parse(args)
-
-	if fs.NArg() != 0 || *message == "" {
-		fs.Usage()
-	}
-	fmt.Printf("\nNew message: %s\n", *message)
-	tweet, err := api.PostTweet(*message, url.Values{})
-	if err != nil {
-		log.Errorf("could not tweet '%s': %v", *message, err)
-	}
-
-	fmt.Printf("\nTweet created at:%s\n", tweet.CreatedAt)
-}
-
-// tweetySniff this method listen tweets that contain the given word.
-// Inspired by #JustForFunc of Francesc Campoy (https://www.youtube.com/c/justforfunc)
-func tweetySniff(args []string, api *anaconda.TwitterApi) {
-	fs := flag.NewFlagSet("sniff", flag.ExitOnError)
-	word := fs.String("word", "", "word to sniff in twitter stream.")
-
-	fs.Parse(args)
-
-	if fs.NArg() != 0 || *word == "" {
-		fs.Usage()
-	}
-	fmt.Printf("\nListening to messages containing: %s\n", *word)
-	stream := api.PublicStreamFilter(url.Values{
-		"track": []string{*word},
-	})
-
-	defer stream.Stop()
-
-	for v := range stream.C {
-		t, ok := v.(anaconda.Tweet)
-		if !ok {
-			log.Warningf("received unexpected value of type %T", v)
-			continue
-		}
-
-		if t.RetweetedStatus != nil {
-			continue
-		}
-
-		log.Infof("\nUser: %s\n%s\n\n", t.User.Name, t.Text)
-	}
-}
-
 func main() {
 	anaconda.SetConsumerKey(consumerKey)
 	anaconda.SetConsumerSecret(consumerSecret)
@@ -146,12 +92,3 @@ func main() {
 	fmt.Fprintln(os.Stderr, `Run "tweety -h" for usage.`)
 	os.Exit(1)
 }
-
-type logger struct {
-	*logrus.Logger
-}
-
-func (log *logger) Critical(args ...interface{})                 { log.Error(args...) }
-func (log *logger) Criticalf(format string, args ...interface{}) { log.Errorf(format, args...) }
-func (log *logger) Notice(args ...interface{})                   { log.Info(args...) }
-func (log *logger) Noticef(format string, args ...interface{})   { log.Infof(format, args...) }
