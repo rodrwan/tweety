@@ -1,5 +1,14 @@
-linux:
-	GOOS=linux go build -o tweety
+APP=tweety
+BIN=$(PWD)/bin/$(APP)
+VERSION=1.0.0
+GO ?= go
 
-os:
-	go build -o tweety
+linux: clean
+	@cd cmd/tweety GOOS=linux $(GO) build -o $(BIN)
+
+build: clean
+	@cd cmd/tweety && $(GO) build -o $(BIN)
+
+clean:
+	@echo "[clean] Cleaning files..."
+	@rm -f $(BIN)

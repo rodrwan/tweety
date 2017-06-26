@@ -1,17 +1,16 @@
-package main
+package tweety
 
 import (
 	"flag"
-	"fmt"
 	"net/url"
 
 	"github.com/ChimeraCoder/anaconda"
 	"github.com/yanzay/log"
 )
 
-// tweetySniff this method listen tweets that contain the given word.
+// Sniff listen tweets that contain the given word.
 // Inspired by #JustForFunc of Francesc Campoy (https://www.youtube.com/c/justforfunc)
-func tweetySniff(args []string, api *anaconda.TwitterApi) {
+func (t *Tweety) Sniff(args []string) {
 	fs := flag.NewFlagSet("sniff", flag.ExitOnError)
 	word := fs.String("word", "", "word to sniff in twitter stream.")
 
@@ -20,8 +19,8 @@ func tweetySniff(args []string, api *anaconda.TwitterApi) {
 	if fs.NArg() != 0 || *word == "" {
 		fs.Usage()
 	}
-	fmt.Printf("\nListening to messages containing: %s\n", *word)
-	stream := api.PublicStreamFilter(url.Values{
+	log.Infof("\nListening to messages containing: %s\n", *word)
+	stream := t.api.PublicStreamFilter(url.Values{
 		"track": []string{*word},
 	})
 
@@ -38,6 +37,6 @@ func tweetySniff(args []string, api *anaconda.TwitterApi) {
 			continue
 		}
 
-		log.Infof("\nUser: %s\n%s\n\n", t.User.Name, t.Text)
+		log.Infof("\nUser: %s | ID: %d\n%s\n\n", t.User.Name, t.Id, t.Text)
 	}
 }

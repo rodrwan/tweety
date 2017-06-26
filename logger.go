@@ -1,4 +1,4 @@
-package main
+package tweety
 
 import "github.com/Sirupsen/logrus"
 

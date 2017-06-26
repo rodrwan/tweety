@@ -1,16 +1,14 @@
-package main
+package tweety
 
 import (
 	"flag"
-	"fmt"
 	"net/url"
 
-	"github.com/ChimeraCoder/anaconda"
 	"github.com/yanzay/log"
 )
 
-// tweetyPost this method allow us to write a new post on a Twitter account.
-func tweetyPost(args []string, api *anaconda.TwitterApi) {
+// Post allow us to write a new post on a Twitter account.
+func (t *Tweety) Post(args []string) {
 	fs := flag.NewFlagSet("post", flag.ExitOnError)
 	message := fs.String("message", "", "message to post in twitter.")
 
@@ -19,11 +17,12 @@ func tweetyPost(args []string, api *anaconda.TwitterApi) {
 	if fs.NArg() != 0 || *message == "" {
 		fs.Usage()
 	}
-	fmt.Printf("\nNew message: %s\n", *message)
-	tweet, err := api.PostTweet(*message, url.Values{})
+
+	log.Infof("\nNew message: %s\n", *message)
+	tweet, err := t.api.PostTweet(*message, url.Values{})
 	if err != nil {
 		log.Errorf("could not tweet '%s': %v", *message, err)
 	}
 
-	fmt.Printf("\nTweet created at:%s\n", tweet.CreatedAt)
+	log.Infof("\nTweet created at:%s\n", tweet.CreatedAt)
 }
