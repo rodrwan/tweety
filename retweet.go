@@ -15,6 +15,7 @@ func (t *Tweety) Retweet(args []string) {
 
 	if fs.NArg() != 0 || *id == 0 {
 		fs.Usage()
+		return
 	}
 
 	log.Infof("\nRetweet: %d\n", *id)

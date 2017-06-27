@@ -18,6 +18,7 @@ func (t *Tweety) Sniff(args []string) {
 
 	if fs.NArg() != 0 || *word == "" {
 		fs.Usage()
+		return
 	}
 	log.Infof("\nListening to messages containing: %s\n", *word)
 	stream := t.api.PublicStreamFilter(url.Values{

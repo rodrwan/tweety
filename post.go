@@ -16,6 +16,7 @@ func (t *Tweety) Post(args []string) {
 
 	if fs.NArg() != 0 || *message == "" {
 		fs.Usage()
+		return
 	}
 
 	log.Infof("\nNew message: %s\n", *message)

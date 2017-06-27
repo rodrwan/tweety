@@ -15,6 +15,7 @@ func (t *Tweety) Search(args []string) {
 
 	if fs.NArg() != 0 || *word == "" {
 		fs.Usage()
+		return
 	}
 	log.Infof("\nSearching messages containing: %s\n", *word)
 	result, err := t.api.GetSearch(*word, nil)
