@@ -2,6 +2,7 @@ package tweety
 
 import (
 	"flag"
+	"fmt"
 	"net/url"
 
 	"github.com/yanzay/log"
@@ -19,11 +20,12 @@ func (t *Tweety) Post(args []string) {
 		return
 	}
 
-	log.Infof("\nNew message: %s\n", *message)
-	tweet, err := t.api.PostTweet(*message, url.Values{})
+	newMsg := fmt.Sprintf("%s #bytweety", *message)
+	log.Infof("\nNew message: %s\n", newMsg)
+	tweet, err := t.api.PostTweet(newMsg, url.Values{})
 	if err != nil {
-		log.Errorf("could not tweet '%s': %v", *message, err)
+		log.Errorf("could not tweet '%s': %v", newMsg, err)
 	}
 
-	log.Infof("\nTweet created at:%s\n", tweet.CreatedAt)
+	log.Infof("Tweet created at:%s\n", tweet.CreatedAt)
 }
